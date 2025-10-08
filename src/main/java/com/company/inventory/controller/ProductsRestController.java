@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -53,6 +55,30 @@ public class ProductsRestController {
 		
 		ResponseEntity<ProductResponseRest> response = productService.saveProduct(product, categoryId);
 		
+		return response;
+	}
+	
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/products/{id}")
+	public ResponseEntity<ProductResponseRest> getProductById(@PathVariable Long id){
+		ResponseEntity<ProductResponseRest> response = productService.searchProductById(id);
+		return response;
+	}
+	
+	
+	/**
+	 * 
+	 * @param name
+	 * @return
+	 */
+	@GetMapping("/products/filter/{name}")
+	public ResponseEntity<ProductResponseRest> getProductByName(@PathVariable String name){
+		ResponseEntity<ProductResponseRest> response = productService.searchByName(name);
 		return response;
 	}
 	

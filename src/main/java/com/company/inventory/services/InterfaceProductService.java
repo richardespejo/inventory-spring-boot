@@ -10,6 +10,8 @@ public interface InterfaceProductService {
 	public ResponseEntity<ProductResponseRest> searchProduct();
 	
 	public ResponseEntity<ProductResponseRest> searchProductById(Long id);
+	
+	public ResponseEntity<ProductResponseRest> searchByName(String name);
 
 	public ResponseEntity<ProductResponseRest> saveProduct(Product product , Long categoryId);
 	
