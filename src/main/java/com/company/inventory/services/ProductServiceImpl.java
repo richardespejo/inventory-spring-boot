@@ -200,9 +200,62 @@ public class ProductServiceImpl implements InterfaceProductService {
 	
 	@Override
 	@Transactional
-	public ResponseEntity<ProductResponseRest> updateProduct(Product product, Long id) {
-		// TODO Auto-generated method stub
-		return null;
+	public ResponseEntity<ProductResponseRest> updateProduct(Product product, Long categoryId , Long id) {
+		
+		ProductResponseRest response = new ProductResponseRest();
+		List<Product> list = new ArrayList<>();
+
+
+		try {
+			
+			Optional<Category> category =  categoryDao.findById(categoryId);
+			
+			if( category.isPresent() ) {
+				product.setCategory(category.get());
+			}else {
+				response.setMetadata("respouesta no ok", "-1", "Categoria no encontrada");
+				return new ResponseEntity<ProductResponseRest>( response ,HttpStatus.NOT_FOUND );
+			}
+			
+			// buscar producto a actualizar
+			Optional<Product> productSearch = productDao.findById(id);
+			
+			if( productSearch.isPresent() ) {
+				
+				// actualizo el producto con el objeto 
+				productSearch.get().setAccount(product.getAccount());	
+				productSearch.get().setCategory(product.getCategory());	
+				productSearch.get().setName(product.getName());			
+				productSearch.get().setPrice(product.getPrice());			
+				productSearch.get().setImage(product.getImage());
+				
+				// se guarda el producto en BD
+				Product productToUpdate = productDao.save(productSearch.get());
+
+				if( productToUpdate != null) {
+					list.add(productToUpdate);
+					response.getProductResponse().setProduct(list);
+					response.setMetadata("respuesta ok", "00", "Producto actualizado");
+				}else {
+					response.setMetadata("respouesta no ok", "-1", "Producto no actualizado");
+					return new ResponseEntity<ProductResponseRest>( response , HttpStatus.BAD_REQUEST );
+				}
+				
+			}else {
+				response.setMetadata("respouesta no ok", "-1", "Error al actualizar producto");
+				return new ResponseEntity<ProductResponseRest>( response , HttpStatus.NOT_FOUND );
+			}
+
+			
+		} catch (Exception e) {
+			
+			response.setMetadata("Respuesta no ok", "-1", "Error al consultar productos");
+			e.getStackTrace();
+			return new ResponseEntity<ProductResponseRest>( response, HttpStatus.INTERNAL_SERVER_ERROR );
+			
+		}
+		
+		return new ResponseEntity<ProductResponseRest>(response, HttpStatus.OK );
 	}
 
 	

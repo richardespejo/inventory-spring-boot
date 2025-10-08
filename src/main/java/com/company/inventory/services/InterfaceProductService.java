@@ -15,7 +15,7 @@ public interface InterfaceProductService {
 
 	public ResponseEntity<ProductResponseRest> saveProduct(Product product , Long categoryId);
 	
-	public ResponseEntity<ProductResponseRest> updateProduct(Product product , Long id);
+	public ResponseEntity<ProductResponseRest> updateProduct(Product product , Long categoryId , Long id);
 	
 	public ResponseEntity<ProductResponseRest> deleteProductById(Long id);
 
