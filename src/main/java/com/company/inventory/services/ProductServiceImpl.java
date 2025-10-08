@@ -35,12 +35,30 @@ public class ProductServiceImpl implements InterfaceProductService {
 	public ResponseEntity<ProductResponseRest> searchProduct() {
 		
 		ProductResponseRest response = new ProductResponseRest();
+		List<Product> list = new ArrayList<>();
+		List<Product> listAux = new ArrayList<>();
+
 
 		try {
 			
-			List<Product> products = (List<Product>) productDao.findAll();
-			response.getProductResponse().setProduct(products);
-			response.setMetadata("Respuesta ok", "00", "Respuesta exitosa");
+			listAux = (List<Product>) productDao.findAll();
+			
+			if( listAux.size() > 0) {
+				
+				listAux.stream().forEach( (prod) -> {
+					byte[] imageDescompressed = Util.decompressZLib(prod.getImage());
+					prod.setImage(imageDescompressed);
+					list.add(prod);
+				});
+				
+				response.getProductResponse().setProduct(list);
+				response.setMetadata("respuesta ok", "00", "Respuesta exitosa");
+
+			}else {
+				response.setMetadata("respouesta no ok", "-1", "Productos no encontrados");
+				return new ResponseEntity<ProductResponseRest>( response ,HttpStatus.NOT_FOUND );
+
+			}
 			
 		} catch (Exception e) {
 			
