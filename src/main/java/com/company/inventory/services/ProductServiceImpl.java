@@ -106,7 +106,6 @@ public class ProductServiceImpl implements InterfaceProductService {
 		try {
 
 			listAux = productDao.findByNameContainingIgnoreCase(name);
-			//Optional<Product> product =  productDao.findByNameContainingIgnoreCase(name);
 			
 			if( listAux.size() > 0) {
 				
@@ -125,7 +124,6 @@ public class ProductServiceImpl implements InterfaceProductService {
 
 			}
 
-			
 		} catch (Exception e) {
 			
 			response.setMetadata("respouesta no ok", "-1", "Error al buscar productos");
@@ -134,7 +132,6 @@ public class ProductServiceImpl implements InterfaceProductService {
 
 		}
 
-		
 		return new ResponseEntity<ProductResponseRest>( response , HttpStatus.OK );
 	}
 	
@@ -205,7 +202,7 @@ public class ProductServiceImpl implements InterfaceProductService {
 			
 		} catch (Exception e) {
 			
-			response.setMetadata("Respuesta no ok", "-1", "Error al eliminar");
+			response.setMetadata("Respuesta no ok", "-1", "Error al eliminar producto");
 			e.getStackTrace();
 			return new ResponseEntity<ProductResponseRest>( response, HttpStatus.INTERNAL_SERVER_ERROR );
 			
